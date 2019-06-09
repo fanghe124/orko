@@ -42,7 +42,7 @@ public class TestCommandLine {
   @Test
   public void testSalt() throws Exception {
     String result = captureStdOut(() -> MonolithApplication.main("salt"));
-    assertTrue(result.startsWith("Salt: "));
+    assertTrue(result.length() > 3);
   }
 
   @Test
@@ -54,24 +54,22 @@ public class TestCommandLine {
 
   @Test
   public void testHashWithSaltLongArg() throws Exception {
-    String salt = captureStdOut(() -> MonolithApplication.main("salt")).substring(6);
-    String result = captureStdOut(() -> MonolithApplication.main("hash", "--salt", salt, "rhubarb"));
-    assertTrue(result.contains("Salt used: " + salt));
-    assertTrue(result.contains("Hashed result: HASH("));
+    String salt = "bIR3DvCFPKLfY410OR2u5g==";
+    String result = captureStdOut(() -> MonolithApplication.main("hash", "--salt", salt, "porky pig the beast"));
+    assertTrue(result.equals("HASH(9NBwT2wpCuA2bCNw8d6JqRIVoxN+GOQzC4PgoH6I4j0=)"));
   }
 
   @Test
   public void testHashWithSaltShortArg() throws Exception {
-    String salt = captureStdOut(() -> MonolithApplication.main("salt")).substring(6);
-    String result = captureStdOut(() -> MonolithApplication.main("hash", "-s", salt, "rhubarb"));
-    assertTrue(result.contains("Salt used: " + salt));
-    assertTrue(result.contains("Hashed result: HASH("));
+    String salt = "bIR3DvCFPKLfY410OR2u5g==";
+    String result = captureStdOut(() -> MonolithApplication.main("hash", "-s", salt, "porky pig the beast"));
+    assertTrue(result.equals("HASH(9NBwT2wpCuA2bCNw8d6JqRIVoxN+GOQzC4PgoH6I4j0=)"));
   }
 
   @Test
   public void testOtp() throws Exception {
     String result = captureStdOut(() -> MonolithApplication.main("otp", "--nocheck"));
-    assertTrue(result.contains("Here's your key. Enter it into Google Authenticator:"));
+    assertTrue(result.length() > 3);
   }
 
   private String captureStdOut(ExceptionThrowingRunnable runnable) throws Exception {
